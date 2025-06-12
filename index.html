@@ -1,8 +1,103 @@
 <!DOCTYPE html>
-<html>
-  <head><meta charset="UTF-8"><title>Bilder</title></head>
-  <body>
-    <h1>Produktbilder</h1>
-    <p>Dies ist das GitHub Pages-Verzeichnis.</p>
-  </body>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Produktbilder – KP Plattner</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      color: #333;
+      margin: 0;
+      padding: 2rem;
+    }
+    header {
+      background-color: #004f83;
+      color: white;
+      padding: 1rem 2rem;
+      border-radius: 8px;
+      margin-bottom: 2rem;
+    }
+    h1 {
+      margin: 0;
+      font-size: 1.8rem;
+    }
+    .image-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+    .image-item {
+      background-color: white;
+      border: 1px solid #ddd;
+      padding: 1rem;
+      border-radius: 8px;
+      text-align: center;
+      width: 200px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .image-item img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px;
+    }
+    .image-item a {
+      text-decoration: none;
+      color: #004f83;
+      word-break: break-word;
+    }
+    footer {
+      margin-top: 3rem;
+      font-size: 0.9rem;
+      color: #666;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Produktbilder – KP Plattner</h1>
+    <p>Öffentlich abrufbare Bilder für Kassensysteme und Automaten</p>
+  </header>
+
+  <section class="image-list" id="imageList">
+    <!-- Bilder werden hier dynamisch eingefügt -->
+  </section>
+
+  <footer>
+    &copy; 2025 KP Plattner GmbH – <a href="https://www.kp-plattner.at" target="_blank">www.kp-plattner.at</a>
+  </footer>
+
+  <script>
+    // Hole Repository-Inhalt über GitHub API und zeige Bilder an
+    const repo = "KPPlattner/images";
+    const branch = "main";
+    const container = document.getElementById("imageList");
+
+    fetch(`https://api.github.com/repos/${repo}/contents/`)
+      .then(res => res.json())
+      .then(data => {
+        data.filter(file => file.type === "file" && /\.(jpe?g|png|gif|webp)$/i.test(file.name))
+          .forEach(file => {
+            const div = document.createElement("div");
+            div.className = "image-item";
+            const img = document.createElement("img");
+            img.src = `https://kpplattner.github.io/images/${file.name}`;
+            const link = document.createElement("a");
+            link.href = img.src;
+            link.textContent = file.name;
+            link.target = "_blank";
+            div.appendChild(img);
+            div.appendChild(document.createElement("br"));
+            div.appendChild(link);
+            container.appendChild(div);
+          });
+      })
+      .catch(error => {
+        container.innerHTML = "<p>Fehler beim Laden der Bilder.</p>";
+        console.error(error);
+      });
+  </script>
+</body>
 </html>
